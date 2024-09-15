@@ -12,6 +12,7 @@ void GameInitialize(void) {
     curTileInd = TILE_USER_INDEX;
     EnemyInitialize(); // 敵の初期化
     ShipInitialize(); // 自機の初期化
+    ShotInitialize(); // ショットの初期化
     gamePause = 0;// 一時停止の初期化
     VDP_drawText("         ",11,11);
     VDP_setWindowVPos(FALSE,1);
@@ -40,7 +41,9 @@ static void GamePlay(void) {
         gameState++;// 初期化の完了
     }
     ShipUpdate(); // 自機の更新
+    ShotUpdate(); // ショットの更新
     EnemyUpdate(); // 敵の更新
     ShipRender(); // 自機の描画
+    ShotRender(); // ショットの描画
     EnemyRender(); // 敵の描画
 }

@@ -14,6 +14,8 @@ void ShipInitialize(void) {
     ship.speed = FIX16(0x02);
     ship.animation  = 0x00;
     ship.timer = 0x00;
+    ship.shot_l = 0x00;
+    ship.shot_h = 0x00;
     VDP_loadTileData(ship_tiles, shipInd=curTileInd,sizeof(ship_tiles)/(8*4), CPU);
     curTileInd += sizeof(ship_tiles)/(8*4);
 }
@@ -38,6 +40,16 @@ void ShipUpdate(void) {
     } else if (input & BUTTON_RIGHT) {
         ship.x += ship.speed;
         if (ship.x>FIX16(64+0xf6))ship.x=FIX16(64+0xf6);
+    }
+    // ショット
+    if (ship.shot_l==0 && (input & BUTTON_A)) {
+        ShotGenerate();
+        ship.shot_l=2;
+        ship.shot_h++;
+    } else if (input & BUTTON_A) {
+        ship.shot_l--;
+    } else {
+        ship.shot_l=0;
     }
 }
 // 自機を描画する

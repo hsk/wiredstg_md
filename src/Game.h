@@ -2,6 +2,7 @@
 #include "App.h"
 #include "Ship.h"
 #include "Enemy.h"
+#include "Shot.h"
 #include "gfx.h"
 #include "string.h"
 // Game.h : ゲーム

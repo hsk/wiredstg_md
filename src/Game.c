@@ -22,6 +22,7 @@ void GameInitialize(void) {
     ShipInitialize(); // 自機の初期化
     ShotInitialize(); // ショットの初期化
     BulletInitialize(); // 弾の初期化
+    ScoreInitialize(); // スコアの初期化
     gamePause = 0;// 一時停止の初期化
     gameScroll = 0;// スクロールの初期化
     gameScroll2 = 0;
@@ -70,6 +71,7 @@ static void GamePlay(void) {
     ShotRender(); // ショットの描画
     EnemyRender(); // 敵の描画
     BulletRender(); // 弾の描画
+    ScoreRender(); // スコアの更新
     if (ship.kind)return;// ゲームオーバーの条件
     gameState = GAME_STATE_OVER; // ゲームオーバー
 }
@@ -107,6 +109,7 @@ static void GameHitCheck(void) {
                 if (--iy->hp==0) {
                     iy->kind = ENEMY_TYPE_BOMB;
                     iy->state = 0;
+                    ScoreAdd();
                 }
             } else if(ground[bc*8+(((fix16ToInt(ix->x)>>3)+gameScroll3)&63)]==0)continue;
             ix->state = 0;

@@ -7,6 +7,7 @@
 #include "Bullet.h"
 #include "Star.h"
 #include "Shot.h"
+#include "Score.h"
 #include "gfx.h"
 #include "string.h"
 // Game.h : ゲーム

@@ -2,6 +2,7 @@
 #include "bios.h"
 #include "App.h"
 #include "Title.h"
+#include "Score.h"
 #include "string.h"
 #include "gfx.h"
 // 変数の定義
@@ -32,6 +33,10 @@ static void updateAnim(void) {
 static void drawSpace(void) {
     // ハイスコアの描画
     if (titleAnimation<0x60)return;
+
+    VDP_drawText("HI-SCORE",6+4,13);
+    ScoreToStr(hiscore,scoreString);
+    VDP_drawText(scoreString,18+4,13);
 
     if (titleTimer&0x10) VDP_drawText("PRESS START BUTTON",7+4,18);
     else                 VDP_drawText("                  ",7+4,18);

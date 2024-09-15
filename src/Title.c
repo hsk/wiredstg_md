@@ -1,6 +1,7 @@
 // Title.c : タイトル
 #include "bios.h"
 #include "App.h"
+#include "Sound.h"
 #include "Title.h"
 #include "Score.h"
 #include "string.h"
@@ -54,10 +55,11 @@ void TitleUpdate(void) {
         if ((input & BUTTON_START) || (input & BUTTON_A)) {// START キーの押下
             titleState++;
             while(titleAnimation<0x60)updateAnim();
+            BGM(titleJingle);
         }
     } else {
         titleTimer += 8;// タイマの更新
-        if (titleTimer >= 0xf8) {// ジングルの監視
+        if (SOUNDWAIT()) {// ジングルの監視
             appState = APP_STATE_GAME_INITIALIZE;// ゲームの開始
         }
     }

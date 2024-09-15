@@ -86,6 +86,7 @@ static void ShipBomb(void) {
         ship.animation = 3;// アニメーションの設定
         ship.timer = 4;// タイマの設定
         ship.state++;// 初期化の完了
+        SE(shipSe);// ＳＥの再生
     }
     // アニメーションの更新
     if (--ship.timer == 0) {

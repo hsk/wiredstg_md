@@ -13,6 +13,7 @@ void EnemyBombUpdate(ENEMY* ix) {
         return;
     }
     if(ix->state==1) {
+        SE(enemyBombSe);// ＳＥの再生
         ix->animation = 0;// アニメーションの設定
         ix->timer = 1;// タイマの設定
         ix->state++;

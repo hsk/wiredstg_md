@@ -16,6 +16,7 @@ void ShotGenerate(void) {
         ix->x = ship.x - FIX16(0x0c);
         ix->y = ship.y;
         ix->state++;
+        SE0(shotSe);// ＳＥの再生
         break;
     }
 }

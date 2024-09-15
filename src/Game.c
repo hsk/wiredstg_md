@@ -54,6 +54,7 @@ static void GameHitCheck(void);
 static void GamePlay(void) {
     if (!(gameState&0xf)) {// 初期化の開始
         gameState++;// 初期化の完了
+        BGM(gamePlayBgm);
     }
     gameScroll2 = (gameScroll2+1)& 1023;
     gameScroll = gameScroll2&0x0f;// スクロールの更新
@@ -75,7 +76,6 @@ static void GamePlay(void) {
     if (ship.kind)return;// ゲームオーバーの条件
     gameState = GAME_STATE_OVER; // ゲームオーバー
 }
-static u8 timer = 0;
 // ゲームオーバーになる
 static void GameOver(void) {
     u8 a = gameState&0xf;
@@ -88,12 +88,11 @@ static void GameOver(void) {
         SystemSetSprite(shipInd, gameover_sprite, 0, FIX16(32+11*8)    , FIX16(11*8));
         SystemSetSprite(shipInd, gameover_sprite, 1, FIX16(32+11*8+5*8), FIX16(11*8));
         gameState++;// 初期化の完了
-        timer = 0;
+        BGM(gameOverBgm);
     } else if (a == 1) {
         updateSprite = 0;
-        timer++;
     }
-    if(timer < 60*3) return;
+    if(!SOUNDWAIT()) return;
     appState = APP_STATE_TITLE_INITIALIZE; // ゲーム初期化
 }
 // ヒットチェックを行う

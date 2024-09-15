@@ -1,5 +1,6 @@
 #include "bios.h"
 #include "Math.h"
+#include "Sound.h"
 #include "App.h"
 #include "Ground.h"
 #include "Ship.h"

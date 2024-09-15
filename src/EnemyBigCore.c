@@ -104,6 +104,7 @@ void EnemyBigCoreUpdateCore(ENEMY* ix) {
 
     if (ix->hp != ix->param0) {// ＨＰの監視
         ix->param0 = ix->hp;
+        SE(enemyBigCoreSeHit);// ＳＥの再生
     }
 }
 // 敵を更新する／ボディ
@@ -119,6 +120,8 @@ void EnemyBigCoreUpdateBody(ENEMY* ix) {
         ix->x = iy->x;
         ix->y = iy->y;
     } else {
+        if (ix->animation == 0x0c)// アニメーションの監視
+            SE(enemyBigCoreSeBomb);// ＳＥの再生
         if (--ix->animation == 0)// アニメーションの更新
             ix->kind = 0;// 敵の削除
 

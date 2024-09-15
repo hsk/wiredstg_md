@@ -1,6 +1,7 @@
 #include "bios.h"
 #include "pal.h"
 #include "gfx.h"
+#include "Sound.h"
 #include "Enemy.h"
 typedef struct VSPR {
   s16 x;
@@ -36,6 +37,7 @@ void SystemInitialize(void) {
     enemyInd=curTileInd;
     for(u8 i = 0; i < 80; i++) vdpSpriteCache[i].link=i+1;
     SystemClearSprite();
+    SystemInitializeSound();
     SYS_setVIntCallback(&vint);
     SYS_enableInts();
 }
@@ -128,6 +130,7 @@ void SystemTransferSprite(void) {
     JOY_update();
     trigger = ~input;
     input = JOY_readJoypad(JOY_1);
+    SystemUpdateSound();
 }
 u8 log_pos = 0;
 void log() {

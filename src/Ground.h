@@ -19,4 +19,5 @@ void GroundInitialize(void);
 void GroundUpdate(void);
 void GroundRender(void);
 // 外部変数宣言
+extern u8 ground[0x0600];
 extern GROUND_GENERATOR groundGenerator;

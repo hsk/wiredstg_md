@@ -103,7 +103,7 @@ static void GameHitCheck(void) {
                     iy->kind = ENEMY_TYPE_BOMB;
                     iy->state = 0;
                 }
-            } else continue;
+            } else if(ground[bc*8+(((fix16ToInt(ix->x)>>3)+gameScroll3)&63)]==0)continue;
             ix->state = 0;
         }
     }
@@ -113,6 +113,10 @@ static void GameHitCheck(void) {
         BULLET* ix = bullet;
         for(u8 b=bulletN;b;b--,ix++) {
             if (ix->state==0)continue;
+            if (ground[(fix16ToInt(ix->y)&0xf8)*8+(((fix16ToInt(ix->x+FIX16(4))>>3)+gameScroll3)&63)]) {
+                ix->state = 0;
+                continue;
+            }
             if (ship.kind!=SHIP_TYPE_VICVIPER) continue;
             s16 a = ship.x-ix->x;
             if (a < FIX16(-4) || FIX16(4) < a) continue;
@@ -127,7 +131,8 @@ static void GameHitCheck(void) {
     // 自機のチェック
     if (ship.kind != SHIP_TYPE_VICVIPER) return;
     u16 tmp1 = fix16ToInt(ship.y)&0xf8;
-    if (enemyCollision[(tmp1<<2)+tmp1+(fix16ToInt(ship.x)>>3)]==0) return;
+    if (enemyCollision[(tmp1<<2)+tmp1+(fix16ToInt(ship.x)>>3)]==0 &&
+        ground[tmp1*8+(((fix16ToInt(ship.x-FIX16(4))>>3)+gameScroll3)&63)]==0) return;
     ship.kind = SHIP_TYPE_BOMB;
     ship.state = 0;
     #endif

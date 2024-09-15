@@ -1,11 +1,13 @@
 // Ground.c : 地面
 #include "Game.h"
 // 変数の定義
+u8 ground[0x0600];// 地面
 u8 ground_flip=0;
 GROUND_GENERATOR groundGenerator;// ジェネレータ
 static u8 groundGeneratorRow[0x18];
 // 地面を初期化する
 void GroundInitialize(void) {
+    memset(ground,0,0x600);// 地面の初期化
     memset(groundGeneratorRow,0,0x018);// 生成する列の初期化
     // ジェネレータの初期化
     groundGenerator.upper_state = 0;
@@ -99,6 +101,8 @@ static void gendown(void) {
 void GroundUpdate(void) {
     // スクロールの開始
     if (gameScroll) return;
+    for(u8* hl=groundGeneratorRow+1,*ix=ground+64+gameScroll3,b=0x17;b;ix+=64,hl++,b--)
+        *ix=*hl;
     memset(groundGeneratorRow,0,0x018);// 生成する列の初期化
     genup();
     gendown();

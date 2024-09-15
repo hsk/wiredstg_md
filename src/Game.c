@@ -16,6 +16,7 @@ void GameInitialize(void) {
     // ゲームの初期化
     curTileInd = TILE_USER_INDEX;
     GroundInitialize(); // 地面の初期化
+    StarInitialize(); // 星の初期化
     EnemyInitialize(); // 敵の初期化
     ShipInitialize(); // 自機の初期化
     ShotInitialize(); // ショットの初期化
@@ -57,11 +58,13 @@ static void GamePlay(void) {
     gameScroll3 = 63-(gameScroll2>>4);
     GameHitCheck();
     GroundUpdate(); // 地面の更新
+    StarUpdate(); // 星の更新
     ShipUpdate(); // 自機の更新
     ShotUpdate(); // ショットの更新
     EnemyUpdate(); // 敵の更新
     BulletUpdate(); // 弾の更新
     GroundRender(); // 地面の描画
+    StarRender(); // 星の描画
     ShipRender(); // 自機の描画
     ShotRender(); // ショットの描画
     EnemyRender(); // 敵の描画
@@ -74,6 +77,7 @@ static u8 timer = 0;
 static void GameOver(void) {
     u8 a = gameState&0xf;
     if (a == 0) {// 初期化の開始
+        StarRender(); // 星の描画
         ShotRender(); // ショットの描画
         EnemyRender(); // 敵の描画
         BulletRender(); // 弾の描画

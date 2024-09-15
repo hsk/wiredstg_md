@@ -5,6 +5,7 @@
 #include "Ship.h"
 #include "Enemy.h"
 #include "Bullet.h"
+#include "Star.h"
 #include "Shot.h"
 #include "gfx.h"
 #include "string.h"

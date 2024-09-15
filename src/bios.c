@@ -22,9 +22,12 @@ void SystemInitialize(void) {
     VDP_clearPlane(BG_A, 0);
     VDP_clearPlane(BG_B, 0);
 
-    PAL_setColors(0, bigcore_pal, 64, CPU);
+    PAL_setColors(0, title_pal, 64, CPU);
     VDP_loadFontData(font,16*5,CPU);
     curTileInd = TILE_USER_INDEX;
+    VDP_loadTileData(title_tiles, TILE_USER_INDEX,sizeof(title_tiles)/(8*4), TRUE);
+    curTileInd += sizeof(title_tiles)/(8*4);
+    VDP_setTileMapDataRectEx(BG_A, title_map,TILE_USER_INDEX, 4, 25, 24, 3, 24, CPU);
     bigcoreInd = curTileInd;
     VDP_loadTileData(bigcore_tiles, bigcoreInd,sizeof(bigcore_tiles)/(8*4), TRUE);
     curTileInd += sizeof(bigcore_tiles)/(8*4);

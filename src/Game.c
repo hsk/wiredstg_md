@@ -15,6 +15,7 @@ u8 gameScroll4;
 void GameInitialize(void) {
     // ゲームの初期化
     curTileInd = TILE_USER_INDEX;
+    curTileInd += sizeof(title_tiles)/(8*4);
     GroundInitialize(); // 地面の初期化
     StarInitialize(); // 星の初期化
     EnemyInitialize(); // 敵の初期化
@@ -91,7 +92,7 @@ static void GameOver(void) {
         timer++;
     }
     if(timer < 60*3) return;
-    appState = APP_STATE_GAME_INITIALIZE; // ゲーム初期化
+    appState = APP_STATE_TITLE_INITIALIZE; // ゲーム初期化
 }
 // ヒットチェックを行う
 static void GameHitCheck(void) {

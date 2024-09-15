@@ -7,14 +7,22 @@
 // 変数の定義
 static char gameState;// 状態
 static char gamePause;// 一時停止
+u8 gameScroll;// スクロール
+u16 gameScroll2;// スクロール
+u8 gameScroll3;
+u8 gameScroll4;
 // ゲームを初期化する
 void GameInitialize(void) {
     // ゲームの初期化
     curTileInd = TILE_USER_INDEX;
+    GroundInitialize(); // 地面の初期化
     EnemyInitialize(); // 敵の初期化
     ShipInitialize(); // 自機の初期化
     ShotInitialize(); // ショットの初期化
     BulletInitialize(); // 弾の初期化
+    gamePause = 0;// 一時停止の初期化
+    gameScroll = 0;// スクロールの初期化
+    gameScroll2 = 0;
     VDP_drawText("         ",11,11);
     VDP_setWindowVPos(FALSE,1);
     VDP_setWindowAddress(VDP_getBGAAddress());
@@ -44,11 +52,16 @@ static void GamePlay(void) {
     if (!(gameState&0xf)) {// 初期化の開始
         gameState++;// 初期化の完了
     }
+    gameScroll2 = (gameScroll2+1)& 1023;
+    gameScroll = gameScroll2&0x0f;// スクロールの更新
+    gameScroll3 = 63-(gameScroll2>>4);
     GameHitCheck();
+    GroundUpdate(); // 地面の更新
     ShipUpdate(); // 自機の更新
     ShotUpdate(); // ショットの更新
     EnemyUpdate(); // 敵の更新
     BulletUpdate(); // 弾の更新
+    GroundRender(); // 地面の描画
     ShipRender(); // 自機の描画
     ShotRender(); // ショットの描画
     EnemyRender(); // 敵の描画

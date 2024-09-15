@@ -19,8 +19,17 @@ void ShipInitialize(void) {
     VDP_loadTileData(ship_tiles, shipInd=curTileInd,sizeof(ship_tiles)/(8*4), CPU);
     curTileInd += sizeof(ship_tiles)/(8*4);
 }
+static void ShipPlay(void);
+static void ShipBomb(void);
 // 自機を更新する
 void ShipUpdate(void) {
+    char a = ship.kind;
+    // 種類別の処理
+    if (a == SHIP_TYPE_VICVIPER) ShipPlay();
+    else if (a == SHIP_TYPE_BOMB) ShipBomb();
+}
+// 自機を操作する
+static void ShipPlay(void) {
     // ↑↓の移動
     if (input & BUTTON_UP) {
         ship.y -= ship.speed;
@@ -50,6 +59,24 @@ void ShipUpdate(void) {
         ship.shot_l--;
     } else {
         ship.shot_l=0;
+    }
+}
+// 自機が爆発する
+static void ShipBomb(void) {
+    // 初期化の開始
+    if (ship.state==0) {
+        ship.animation = 3;// アニメーションの設定
+        ship.timer = 4;// タイマの設定
+        ship.state++;// 初期化の完了
+    }
+    // アニメーションの更新
+    if (--ship.timer == 0) {
+        ship.timer = 4;
+        if (++ship.animation == 0xb) {
+            // 自機の削除
+            ship.kind = 0;
+            ship.state = 0;
+        }
     }
 }
 // 自機を描画する

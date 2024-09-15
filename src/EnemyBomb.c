@@ -7,6 +7,7 @@ void EnemyBombGenerate(void) {
 void EnemyBombUpdate(ENEMY* ix) {
     // 初期化の開始
     if(ix->state==0){
+        BulletGenerate(ix->x,ix->y);// 撃ち返し
         ix->state++;// 初期化の完了
         ix->animation = 0;// アニメーションの設定
         return;

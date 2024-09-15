@@ -49,6 +49,7 @@ void EnemyGarunUpdate(ENEMY* ix) {
     // 初期化の開始
     if (ix->state==0){
         ix->param0 = 0;// パラメータの設定
+        ix->shot = (random()&0x1f)+0x10;// ショットの設定
         ix->timer = 0;// タイマの設定
         ix->state++;// 初期化の完了
     }
@@ -65,6 +66,11 @@ void EnemyGarunUpdate(ENEMY* ix) {
         ix->param0++;
         ix->y += intToFix16((s8)enemyGarunCurve[ix->param0&0x1f]);
         if (ix->y>=FIX16(0xc0)) break;
+        // ショットの更新
+        if (--ix->shot == 0) {
+            BulletGenerate(ix->x,ix->y);
+            ix->shot=(random()&0x1f)+0x18;
+        }
         // アニメーションの更新
         ix->timer++;
         ix->animation=enemyGarunAnimation[

@@ -22,9 +22,14 @@ void SystemInitialize(void) {
     VDP_clearPlane(BG_A, 0);
     VDP_clearPlane(BG_B, 0);
 
-    PAL_setColors(0, ship_pal, 64, CPU);
+    PAL_setColors(0, bigcore_pal, 64, CPU);
     VDP_loadFontData(font,16*5,CPU);
     curTileInd = TILE_USER_INDEX;
+    bigcoreInd = curTileInd;
+    VDP_loadTileData(bigcore_tiles, bigcoreInd,sizeof(bigcore_tiles)/(8*4), TRUE);
+    curTileInd += sizeof(bigcore_tiles)/(8*4);
+    VDP_setVerticalScroll(BG_B,72);
+    VDP_setTileMapDataRectEx(BG_B, bigcore_map,bigcoreInd, 0, 0,12, 9, 12, CPU);
     enemyInd=curTileInd;
     for(u8 i = 0; i < 80; i++) vdpSpriteCache[i].link=i+1;
     SystemClearSprite();

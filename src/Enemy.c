@@ -19,7 +19,7 @@ static FP const enemyGenerateProc[] = {
     EnemyNullGenerate,
     EnemyNullGenerate,
     EnemyNullGenerate,
-    EnemyNullGenerate,
+    EnemyBigCoreGenerate,
     0x0000,
     0x0000,
 };
@@ -72,9 +72,9 @@ static FP1 const enemyUpdateProc[] = {
     EnemyNullUpdate,
     EnemyNullUpdate,
     EnemyNullUpdate,
-    EnemyNullUpdate,
-    EnemyNullUpdate,
-    EnemyNullUpdate,
+    EnemyBigCoreUpdateCore,
+    EnemyBigCoreUpdateBody,
+    EnemyBeamUpdate,
 };
 // 描画
 static void EnemyNullRender(ENEMY*);
@@ -94,9 +94,9 @@ static FP1 const enemyRenderProc[] = {
     EnemyNullRender,
     EnemyNullRender,
     EnemyNullRender,
-    EnemyNullRender,
-    EnemyNullRender,
-    EnemyNullRender,
+    EnemyBigCoreRender,
+    EnemyBigCoreBodyRender,
+    EnemyBeamRender,
 };
 // 変数の定義
 ENEMY enemy[ENEMY_N];// 敵
@@ -116,7 +116,10 @@ void EnemyInitialize(void) {
     // コリジョンの初期化
     memset(enemyCollision,0,0x03c0);
     VDP_loadTileData(enemy_tiles, enemyInd,sizeof(enemy_tiles)/(8*4), CPU);
-    curTileInd = enemyInd+sizeof(enemy_tiles)/(8*4);
+    beamInd = curTileInd = enemyInd+sizeof(enemy_tiles)/(8*4);
+    VDP_loadTileData(beam_tiles, curTileInd,sizeof(beam_tiles)/(8*4), CPU);
+    curTileInd +=sizeof(beam_tiles)/(8*4);
+    VDP_setVerticalScroll(BG_B,72);
 }
 // 敵を更新する
 void EnemyUpdate(void) {
@@ -146,13 +149,71 @@ static void EnemyNullGenerate(void) {
             enemyGenerator.timer=8;
             enemyGenerator.state++;
         }
-        // タイマの更新
-        if(--enemyGenerator.timer) return;
-        // 敵の生成
+        if (ship.shot_h < 0xf0) {
+            // タイマの更新
+            if(--enemyGenerator.timer) return;
+            // 敵の生成
+            enemyGenerator.state = 0;
+            enemyGenerator.kind = enemyGenerateType[random()&0x1f];
+            return;
+        }
+        enemyGenerator.phase = ENEMY_PHASE_WARNING;
         enemyGenerator.state = 0;
-        enemyGenerator.kind = enemyGenerateType[random()&0x1f];
         return;
     }
+    if (a==ENEMY_PHASE_WARNING) {
+        // 警告の初期化
+        if (enemyGenerator.state==0) {
+            enemyGenerator.timer = 0x30;
+            enemyGenerator.state++;
+        }
+        // 敵の監視
+        {
+            a = 0;
+            ENEMY*hl=enemy;
+            for(u8 b=enemyN;b;hl++,b--) a |= hl->kind;
+            if (a) return;
+        }
+        // タイマの更新
+        if(--enemyGenerator.timer) return;
+        // ビッグコアの生成
+        enemyGenerator.kind = ENEMY_TYPE_BIGCORE_CORE;
+        enemyGenerator.state = 0;
+        // 警告の完了
+        enemyGenerator.phase = ENEMY_PHASE_BOSS;
+        enemyGenerator.state = 0;
+        return;
+    }
+    // ボス戦の開始
+    if (a!=ENEMY_PHASE_BOSS) return;
+    // ボス戦の初期化
+    if (enemyGenerator.state==0){
+        enemyGenerator.timer = 0x60;
+        enemyGenerator.state++;
+    }
+    {
+        ENEMY* hl = enemy;
+        // ボスの監視
+        for(u8 b = enemyN;b;hl ++,--b)
+            if (hl->kind == ENEMY_TYPE_BIGCORE_BODY) return;
+    }
+    VDP_setVerticalScroll(BG_B,72);
+    // タイマの更新
+    if(--enemyGenerator.timer) {
+        return;
+    }
+    // 自機のリセット
+    ship.shot_h = 0;
+    // 敵の増加
+    enemyN+=3;
+    if (enemyN>ENEMY_N) enemyN = ENEMY_N;
+    // 弾の増加
+    bulletN+=3;
+    if (bulletN>BULLET_N) bulletN=BULLET_N;
+    // ボス戦の完了
+    enemyGenerator.phase=ENEMY_PHASE_NORMAL;
+    enemyGenerator.state=0;
+    // 生成の完了
 }
 // ENEMY_TYPE_NULL を更新する
 static void EnemyNullUpdate(ENEMY* ix) {

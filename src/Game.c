@@ -15,7 +15,6 @@ void GameInitialize(void) {
     ShipInitialize(); // 自機の初期化
     ShotInitialize(); // ショットの初期化
     BulletInitialize(); // 弾の初期化
-    gamePause = 0;// 一時停止の初期化
     VDP_drawText("         ",11,11);
     VDP_setWindowVPos(FALSE,1);
     VDP_setWindowAddress(VDP_getBGAAddress());

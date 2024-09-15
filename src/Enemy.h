@@ -33,6 +33,8 @@ typedef struct GENERATOR {
 // 段階
 #define ENEMY_PHASE_NULL        0x00
 #define ENEMY_PHASE_NORMAL      0x01
+#define ENEMY_PHASE_WARNING     0x02
+#define ENEMY_PHASE_BOSS        0x03
 // 種類
 #define ENEMY_TYPE_NULL         0x00
 #define ENEMY_TYPE_BOMB         0x01
@@ -70,6 +72,14 @@ void EnemyPutPattern16x16(ENEMY* ix, const FSPR* fsprs);
 void EnemyBombGenerate();
 void EnemyBombUpdate(ENEMY* ix);
 void EnemyBombRender(ENEMY* ix);
+void EnemyBigCoreGenerate(void);
+void EnemyBigCoreUpdateCore(ENEMY* ix);
+void EnemyBigCoreUpdateBody(ENEMY* ix);
+void EnemyBigCoreRender(ENEMY* ix);
+void EnemyBigCoreBodyRender(ENEMY* ix);
+void EnemyBeamGenerate(short hl);
+void EnemyBeamUpdate(ENEMY* ix);
+void EnemyBeamRender(ENEMY* ix);
 // 外部変数宣言
 extern u16 enemyInd;
 extern u16 bigcoreInd;

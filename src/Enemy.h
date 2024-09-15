@@ -57,6 +57,12 @@ void EnemyUpdate(void);
 void EnemyRender(void);
 ENEMY* EnemyGetEmpty(void);
 
+void EnemyFansGenerate(void);
+void EnemyFansUpdate(ENEMY* ix);
+void EnemyFansRender(ENEMY* ix);
+void EnemyRugalGenerate(void);
+void EnemyRugalUpdate(ENEMY* ix);
+void EnemyRugalRender(ENEMY* ix);
 void EnemyGarunGenerate(void);
 void EnemyGarunUpdate(ENEMY* ix);
 void EnemyGarunRender(ENEMY* ix);

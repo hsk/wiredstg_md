@@ -4,6 +4,7 @@ u16 shipInd;
 // 変数の定義
 SHIP ship;// 自機
 // 自機を初期化する
+static void SpeedRender(void);
 void ShipInitialize(void) {
     // 自機の初期化
     ship.kind = SHIP_TYPE_VICVIPER;
@@ -18,6 +19,7 @@ void ShipInitialize(void) {
     ship.shot_h = 0x00;
     VDP_loadTileData(ship_tiles, shipInd=curTileInd,sizeof(ship_tiles)/(8*4), CPU);
     curTileInd += sizeof(ship_tiles)/(8*4);
+    SpeedRender();
 }
 static void ShipPlay(void);
 static void ShipBomb(void);
@@ -28,8 +30,24 @@ void ShipUpdate(void) {
     if (a == SHIP_TYPE_VICVIPER) ShipPlay();
     else if (a == SHIP_TYPE_BOMB) ShipBomb();
 }
+static void SpeedRender(void) {
+    static char* speedString[5] = {
+        "  ",
+        " `",
+        " a",
+        "`a",
+        "aa",
+    };
+    VDP_drawText(speedString[fix16ToInt(ship.speed)-1],30,0);
+}
 // 自機を操作する
 static void ShipPlay(void) {
+    if (trigger & BUTTON_C) {
+        ship.speed += FIX16(1);
+        if(ship.speed == FIX16(5)) ship.speed = FIX16(1);
+        SpeedRender();
+    }
+
     // ↑↓の移動
     if (input & BUTTON_UP) {
         ship.y -= ship.speed;

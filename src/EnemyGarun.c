@@ -75,5 +75,5 @@ void EnemyGarunUpdate(ENEMY* ix) {
     ix->kind = 0;// 敵の削除
 }
 void EnemyGarunRender(ENEMY* ix) {
-    SystemSetSprite(enemyInd, garun_sprite, ix->animation, ix->x, ix->y);
+    EnemyPutPattern16x16(ix, garun_sprite);
 }

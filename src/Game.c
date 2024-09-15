@@ -35,15 +35,36 @@ void GameUpdate(void) {
     random();// 乱数の更新
     GamePlay();
 }
+static void GameHitCheck(void);
 // ゲームをプレイする
 static void GamePlay(void) {
     if (!(gameState&0xf)) {// 初期化の開始
         gameState++;// 初期化の完了
     }
+    GameHitCheck();
     ShipUpdate(); // 自機の更新
     ShotUpdate(); // ショットの更新
     EnemyUpdate(); // 敵の更新
     ShipRender(); // 自機の描画
     ShotRender(); // ショットの描画
     EnemyRender(); // 敵の描画
+}
+// ヒットチェックを行う
+static void GameHitCheck(void) {
+    { // ショットのチェック
+        SHOT *ix = shot;
+        for(u8 b = SHOT_N;b;ix++,--b) {
+            if(ix->state==0)continue;
+            u16 bc = fix16ToInt(ix->y)&0xf8;
+            u8 a = enemyCollision[(bc<<2)+bc+(fix16ToInt(ix->x)>>3)]; 
+            if (a) {
+                ENEMY* iy = enemy -1 + a;
+                if (--iy->hp==0) {
+                    iy->kind = ENEMY_TYPE_BOMB;
+                    iy->state = 0;
+                }
+            } else continue;
+            ix->state = 0;
+        }
+    }
 }

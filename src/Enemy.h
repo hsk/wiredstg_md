@@ -60,6 +60,10 @@ ENEMY* EnemyGetEmpty(void);
 void EnemyGarunGenerate(void);
 void EnemyGarunUpdate(ENEMY* ix);
 void EnemyGarunRender(ENEMY* ix);
+void EnemyPutPattern16x16(ENEMY* ix, const FSPR* fsprs);
+void EnemyBombGenerate();
+void EnemyBombUpdate(ENEMY* ix);
+void EnemyBombRender(ENEMY* ix);
 // 外部変数宣言
 extern u16 enemyInd;
 extern u16 bigcoreInd;
@@ -67,3 +71,4 @@ extern u16 beamInd;
 extern ENEMY enemy[ENEMY_N];
 extern char eneyN;
 extern GENERATOR enemyGenerator;
+extern u8 enemyCollision[0x03c0];

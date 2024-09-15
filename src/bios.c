@@ -1,6 +1,7 @@
 #include "bios.h"
 #include "pal.h"
 #include "gfx.h"
+#include "Enemy.h"
 typedef struct VSPR {
   s16 x;
   s16 y;
@@ -24,6 +25,7 @@ void SystemInitialize(void) {
     PAL_setColors(0, ship_pal, 64, CPU);
     VDP_loadFontData(font,16*5,CPU);
     curTileInd = TILE_USER_INDEX;
+    enemyInd=curTileInd;
     for(u8 i = 0; i < 80; i++) vdpSpriteCache[i].link=i+1;
     SystemClearSprite();
     SYS_setVIntCallback(&vint);

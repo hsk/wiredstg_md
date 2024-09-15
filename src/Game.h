@@ -1,6 +1,7 @@
 #include "bios.h"
 #include "App.h"
 #include "Ship.h"
+#include "Enemy.h"
 #include "gfx.h"
 #include "string.h"
 // Game.h : ゲーム
